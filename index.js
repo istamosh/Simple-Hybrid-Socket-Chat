@@ -29,4 +29,11 @@ io.on('connection', function(socket){
   socket.on('chat', function(data){
     io.sockets.emit('chat', data);
   });
+
+  // listens particular emitted typing event from clientside
+  // to every other clients EXCEPT the typer, of the typer
+  // data which consist of their ID in clientside/frontend.
+  socket.on('typing', (data) => {
+    socket.broadcast.emit('typing', data);
+  });
 });

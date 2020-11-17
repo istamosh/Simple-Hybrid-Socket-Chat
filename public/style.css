@@ -32,10 +32,11 @@ h2{
     font-family: sans-serif;
 }
 
-#feedback p{
+#isTyping p{
     color: #aaa;
     padding: 14px 0px;
     margin: 0 20px;
+    font-family: sans-serif;
 }
 
 #output strong{
