@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/istamosh/Simple-Hybrid-Socket-Chat#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^3.0.1"
   },
   "devDependencies": {}
 }
