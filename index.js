@@ -20,4 +20,13 @@ var io = socket(server);
 // And log the socket.id
 io.on('connection', function(socket){
   console.log('someone is socket-connected. id: '+ socket.id);
+
+  // listens emitted chat contains data in it.
+  // refers to ALL socket connections inside chat room,
+  // then emit data sent by one of the client to ALL
+  // the other socket clients.
+  // data is a bundled variable inside {} with : of it.
+  socket.on('chat', function(data){
+    io.sockets.emit('chat', data);
+  });
 });
