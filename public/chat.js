@@ -15,12 +15,27 @@ chatBox = document.getElementById('chat-box');
 // going to be "chat" messages, the second is the data
 // or object to be send to server.
 // below contains two datas: message and userName.
-btnSend.addEventListener('click', function(){
-  socket.emit('chat', {
-    message: message.value,
-    userName: userName.value
-  });
+btnSend.addEventListener('click', function() {
+  trySendMessage();
 });
+// you could also adding enter key to send a message
+message.addEventListener('keyup', (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault(); // idk about this
+
+    trySendMessage();
+  }
+});
+// adding func. for handle whitespace, click and enter event.
+function trySendMessage() {
+  if ((message.value.trim() != '') && (userName.value.trim() != '')) {
+    socket.emit('chat', {
+      message: message.value,
+      userName: userName.value
+    });
+    return message.value = '';
+  }
+}
 
 // keypress event listener of message, custom arrow func.
 // then emit typing event if someone is typing.
@@ -28,14 +43,14 @@ message.addEventListener('keypress', () => {
   socket.emit('typing', userName.value);
 });
 
-var bottomSnapped = true;
+var scrollSnap = true;
 chatBox.addEventListener('scroll', () => {
   var currentPos = chatBox.scrollTop + chatBox.offsetHeight;
   if (currentPos == chatBox.scrollHeight) {
-    bottomSnapped = true;
+    scrollSnap = true;
   }
   else {
-    bottomSnapped = false;
+    scrollSnap = false;
   }
 });
 
@@ -47,7 +62,7 @@ socket.on('chat', function(data){
   output.innerHTML += '<p><strong>' + data.userName +
   ': </strong>' + data.message + '</p>';
 
-  if (bottomSnapped) {
+  if (scrollSnap) {
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
 });
