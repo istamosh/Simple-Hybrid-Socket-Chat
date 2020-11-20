@@ -33,7 +33,10 @@ io.on('connection', function(socket){
   // listens particular emitted typing event from clientside
   // to every other clients EXCEPT the typer, of the typer
   // data which consist of their ID in clientside/frontend.
+  // experimenting typingUsers var.
+  var typingUsers = [];
   socket.on('typing', (data) => {
+    typingUsers.push(data);
     socket.broadcast.emit('typing', data);
   });
 });

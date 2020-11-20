@@ -57,7 +57,7 @@ chatBox.addEventListener('scroll', () => {
 // listen for events on server-side.
 // append pre-cooked code inside output's HTML as chat comp.
 // reset isTyping HTML to empty (this need more work).
-socket.on('chat', function(data){
+socket.on('chat', function(data) {
   isTyping.innerHTML = "";
   output.innerHTML += '<p><strong>' + data.userName +
   ': </strong>' + data.message + '</p>';
@@ -72,5 +72,5 @@ socket.on('chat', function(data){
 // concatenate data variable between two HTML tags.
 // note: <em> tag is italic style, named 'emphasis'
 socket.on('typing', (data) => {
-  isTyping.innerHTML = '<p><em>' + data + 'is typing... </em></p>';
+  isTyping.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
 });
