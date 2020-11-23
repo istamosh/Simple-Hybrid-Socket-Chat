@@ -16,17 +16,17 @@ var io = socket(server);
 
 // adding user managing modules from other class
 // inspired from adrianhajdin.
-const { addUser, removeUser } = require('./userMan.js');
+const { addUser, getUser, removeUser } = require('./userMan.js');
 
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
 // to do stuff with that socket object later on.
 // And log the socket.id
-const bracket = '#';
+const prefix = 'user#';
 io.on('connection', function(socket) {
   const { user } = addUser({
     id: socket.id,
-    name: bracket.concat(socket.id.substring(16))
+    name: prefix.concat(socket.id.substring(16))
   });
   console.log('someone is socket-connected. id: '+ socket.id +', '+ user.name);
 
@@ -43,7 +43,12 @@ io.on('connection', function(socket) {
   // to every other clients EXCEPT the typer, of the typer
   // data which consist of their ID in clientside/frontend.
   socket.on('typing', (data) => {
-    socket.broadcast.emit('typing', data);
+    const user = getUser(socket.id);
+    if (data.trim() == '') {
+      socket.broadcast.emit('typing', user.name);
+    } else {
+      socket.broadcast.emit('typing', data);
+    }
   });
 
   socket.on('disconnect', () => {

@@ -6,6 +6,13 @@ function addUser({ id, name }) {
   return { user };
 };
 
+// find user within users array using incoming id param. by matching
+// their id inside the pool.
+function getUser(id) {
+  return users.find((user) =>
+  user.id === id);
+};
+
 // remove user by their socket ID.
 // declare a new index number that will contain a number
 // from user, that is found inside of users array by matching
@@ -23,4 +30,5 @@ function removeUser(id) {
   }
 };
 
-module.exports = { addUser, removeUser };
+// export the modules so they can be used by another class
+module.exports = { addUser, getUser, removeUser };
