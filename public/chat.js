@@ -2,12 +2,12 @@
 var socket = io.connect('http://localhost:5000');
 
 // Query DOM, index.html ids userNamer
-var message = document.getElementById('message');
-userName = document.getElementById('userName'),
-btnSend = document.getElementById('send'),
-output = document.getElementById('output'),
-isTyping = document.getElementById('isTyping'),
-chatBox = document.getElementById('chat-box');
+var message = document.getElementById('message'),
+  userName = document.getElementById('userName'),
+  btnSend = document.getElementById('send'),
+  output = document.getElementById('output'),
+  isTyping = document.getElementById('isTyping'),
+  chatBox = document.getElementById('chat-box');
 
 // emit events.
 // on send button click, callback a function.
@@ -71,6 +71,15 @@ socket.on('chat', function(data) {
 // serverside, then append into isTyping's HTML side.
 // concatenate data variable between two HTML tags.
 // note: <em> tag is italic style, named 'emphasis'
+var typingUsers = [];
+const time = 3;
 socket.on('typing', (data) => {
+  var typingUser = {
+    name: data,
+    time: time
+  };
+  typingUsers.push(typingUser);
+  console.log(`currently typing: ${typingUsers[0].name}, time: ${typingUsers[0].time}`);
+
   isTyping.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
 });

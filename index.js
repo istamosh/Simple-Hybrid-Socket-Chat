@@ -14,12 +14,21 @@ app.use(express.static('public'));
 // setup socket to work in the server
 var io = socket(server);
 
+// adding user managing modules from other class
+// inspired from adrianhajdin.
+const { addUser, removeUser } = require('./userMan.js');
+
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
 // to do stuff with that socket object later on.
 // And log the socket.id
-io.on('connection', function(socket){
-  console.log('someone is socket-connected. id: '+ socket.id);
+const bracket = '#';
+io.on('connection', function(socket) {
+  const { user } = addUser({
+    id: socket.id,
+    name: bracket.concat(socket.id.substring(16))
+  });
+  console.log('someone is socket-connected. id: '+ socket.id +', '+ user.name);
 
   // listens emitted chat contains data in it.
   // refers to ALL socket connections inside chat room,
@@ -33,10 +42,11 @@ io.on('connection', function(socket){
   // listens particular emitted typing event from clientside
   // to every other clients EXCEPT the typer, of the typer
   // data which consist of their ID in clientside/frontend.
-  // experimenting typingUsers var.
-  var typingUsers = [];
   socket.on('typing', (data) => {
-    typingUsers.push(data);
     socket.broadcast.emit('typing', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} has disconnected.`);
   });
 });
