@@ -16,7 +16,7 @@ var io = socket(server);
 
 // adding user managing modules from other class
 // inspired from adrianhajdin.
-const { addUser, getUser, editUser, removeUser } = require('./userMan.js');
+const { addUser, getUser, editUser, displayAllUsers, removeUser } = require('./userMan.js');
 
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
@@ -29,6 +29,7 @@ io.on('connection', function(socket) {
     name: prefix.concat(socket.id.substring(16))
   });
   console.log('someone is socket-connected. id: '+ socket.id +', '+ user.name);
+  displayAllUsers();
 
   // listens emitted chat contains data in it.
   // refers to ALL socket connections inside chat room,
@@ -37,6 +38,7 @@ io.on('connection', function(socket) {
   // data is a bundled variable inside {} with : of it.
   socket.on('chat', function(data){
     editUser(socket.id, data);
+    displayAllUsers();
     io.sockets.emit('chat', data);
   });
 
@@ -44,7 +46,7 @@ io.on('connection', function(socket) {
   // to every other clients EXCEPT the typer, of the typer
   // data which consist of their ID in clientside/frontend.
   socket.on('typing', (data) => {
-    const user = getUser(socket.id);
+    let user = getUser(socket.id);
     if (data.trim() == '') {
       socket.broadcast.emit('typing', user.name);
     } else {

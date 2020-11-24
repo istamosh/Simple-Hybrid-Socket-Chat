@@ -14,11 +14,19 @@ function getUser(id) {
 };
 
 const editUser = (id, data) => {
-  let user = getUser(id);
-  console.log(`${user.name}(${user.id}) has changed their name to:`);
-  user.name = data.userName;
-  console.log(`${user.name}(${user.id})`);
+  // this is so wrong     v
+  //let userIndex = users.findIndex(getUser(id));
+  console.log(userIndex);
+  //console.log(`${user.name}(${user.id}) has changed their name to:`);
+  //user.name = data.userName; this is so wrong
+  //console.log(`${user.name}(${user.id})`);
   return;
+};
+
+const displayAllUsers = () => {
+  for (var i in users) {
+    console.log(`index[${i}] contains: ${users[i].name}(${users[i].id})`);
+  }
 };
 
 // remove user by their socket ID.
@@ -39,4 +47,4 @@ function removeUser(id) {
 };
 
 // export the modules so they can be used by another class
-module.exports = { addUser, getUser, editUser, removeUser };
+module.exports = { addUser, getUser, editUser, displayAllUsers, removeUser };
