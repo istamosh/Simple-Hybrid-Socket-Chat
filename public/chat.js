@@ -9,15 +9,15 @@ var message = document.getElementById('message'),
   isTyping = document.getElementById('isTyping'),
   chatBox = document.getElementById('chat-box');
 
+userName.addEventListener('keyup', (event) => {
+  //if ()
+});
+
 // emit events.
-// on send button click, callback a function.
 // emitting socket consists of two params., the first is
 // going to be "chat" messages, the second is the data
 // or object to be send to server.
 // below contains two datas: message and userName.
-btnSend.addEventListener('click', function() {
-  trySendMessage();
-});
 // you could also adding enter key to send a message
 message.addEventListener('keyup', (event) => {
   if (event.keyCode === 13) {
@@ -25,6 +25,10 @@ message.addEventListener('keyup', (event) => {
 
     trySendMessage();
   }
+});
+// on send button click, callback a function.
+btnSend.addEventListener('click', function() {
+  trySendMessage();
 });
 // adding func. for handle whitespace, click and enter event.
 function trySendMessage() {
