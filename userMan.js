@@ -14,19 +14,21 @@ function getUser(id) {
 };
 
 const editUser = (id, data) => {
-  // this is so wrong     v
-  //let userIndex = users.findIndex(getUser(id));
-  console.log(userIndex);
-  //console.log(`${user.name}(${user.id}) has changed their name to:`);
-  //user.name = data.userName; this is so wrong
-  //console.log(`${user.name}(${user.id})`);
-  return;
+  for (var i in users) {
+    if (users[i].id === id) {
+      console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
+      users[i].name = data.userName;
+      console.log(`${users[i].name}(${users[i].id})`);
+      return;
+    }
+  }
 };
 
 const displayAllUsers = () => {
   for (var i in users) {
     console.log(`index[${i}] contains: ${users[i].name}(${users[i].id})`);
   }
+  return;
 };
 
 // remove user by their socket ID.

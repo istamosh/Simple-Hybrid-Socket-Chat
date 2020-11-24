@@ -38,7 +38,7 @@ io.on('connection', function(socket) {
   // data is a bundled variable inside {} with : of it.
   socket.on('chat', function(data){
     editUser(socket.id, data);
-    displayAllUsers();
+    displayAllUsers(); // debugging purpose
     io.sockets.emit('chat', data);
   });
 
