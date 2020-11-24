@@ -16,7 +16,7 @@ var io = socket(server);
 
 // adding user managing modules from other class
 // inspired from adrianhajdin.
-const { addUser, getUser, removeUser } = require('./userMan.js');
+const { addUser, getUser, editUser, removeUser } = require('./userMan.js');
 
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
@@ -36,6 +36,7 @@ io.on('connection', function(socket) {
   // the other socket clients.
   // data is a bundled variable inside {} with : of it.
   socket.on('chat', function(data){
+    editUser(socket.id, data);
     io.sockets.emit('chat', data);
   });
 

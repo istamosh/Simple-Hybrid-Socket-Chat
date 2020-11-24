@@ -8,11 +8,11 @@ var message = document.getElementById('message'),
   output = document.getElementById('output'),
   isTyping = document.getElementById('isTyping'),
   chatBox = document.getElementById('chat-box');
-
+/*
 userName.addEventListener('keyup', (event) => {
-  //if ()
+  if ()
 });
-
+*/
 // emit events.
 // emitting socket consists of two params., the first is
 // going to be "chat" messages, the second is the data

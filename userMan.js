@@ -13,6 +13,14 @@ function getUser(id) {
   user.id === id);
 };
 
+const editUser = (id, data) => {
+  let user = getUser(id);
+  console.log(`${user.name}(${user.id}) has changed their name to:`);
+  user.name = data.userName;
+  console.log(`${user.name}(${user.id})`);
+  return;
+};
+
 // remove user by their socket ID.
 // declare a new index number that will contain a number
 // from user, that is found inside of users array by matching
@@ -31,4 +39,4 @@ function removeUser(id) {
 };
 
 // export the modules so they can be used by another class
-module.exports = { addUser, getUser, removeUser };
+module.exports = { addUser, getUser, editUser, removeUser };
