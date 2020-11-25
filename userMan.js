@@ -16,19 +16,26 @@ function getUser(id) {
 const updateUser = (id, data) => {
   for (var i in users) {
     if (id === users[i].id && data.userName !== users[i].name) {
-      console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
-      users[i].name = data.userName;
-      console.log(`${users[i].name}(${users[i].id})`);
-      return true;
+      if (data.userName.trim() === '') {
+        users[i].name = ('user#').concat(users[i].id.substring(16));
+        return true;
+      } else {
+        console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
+        users[i].name = data.userName;
+        console.log(`${users[i].name}(${users[i].id})`);
+        return true;
+      }
     }
   }
   return false;
 };
 
 const displayAllUsers = () => {
+  console.log(`=============================================`);
   for (var i in users) {
-    console.log(`index[${i}] contains: ${users[i].name}(${users[i].id})`);
+    console.log(` - [${i}]: ${users[i].name}(${users[i].id})`);
   }
+  console.log(`=============================================`);
   return;
 };
 

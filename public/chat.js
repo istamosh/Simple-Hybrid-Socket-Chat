@@ -10,9 +10,11 @@ var message = document.getElementById('message'),
   chatBox = document.getElementById('chat-box');
 
 // retrieve initial name from server
+/*
 socket.on('defaultName', (data) => {
   userName.value = data.userName;
 });
+*/
 // emit events.
 // emitting socket consists of two params., the first is
 // going to be "chat" messages, the second is the data

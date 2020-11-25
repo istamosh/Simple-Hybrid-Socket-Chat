@@ -20,23 +20,23 @@ const { addUser, getUser, updateUser, displayAllUsers, removeUser } = require('.
 
 
 function someoneConnected(id) {
-  const prefix = 'user#';
   const { user } = addUser({
     id: id,
-    name: prefix.concat(id.substring(16))
+    name: ('user#').concat(id.substring(16))
   });
-  console.log('someone is socket-connected. id: '+ id +', '+ user.name);
-  displayAllUsers();
-}
+  console.log(`${user.name}(${id}) is connected.`);
+};
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
 // to do stuff with that socket object later on.
 // And log the socket.id
 io.on('connection', function(socket) {
   someoneConnected(socket.id);
+  /*
   io.to(socket.id).emit('defaultName', {
     userName: getUser(socket.id).name
   });
+  */
   // listens emitted chat contains data in it.
   // refers to ALL socket connections inside chat room,
   // then emit data sent by one of the client to ALL
@@ -44,7 +44,6 @@ io.on('connection', function(socket) {
   // data is a bundled variable inside {} with : of it.
   socket.on('chat', function(data) {
     let updated = updateUser(socket.id, data);
-    //console.log(`updated status: ${updated}`);
     if (updated) {
       displayAllUsers();
     }
@@ -52,11 +51,8 @@ io.on('connection', function(socket) {
     if (data.userName.trim() == '') {
       let user = getUser(socket.id);
       data.userName = user.name;
-      console.log(`if trim test "${data.userName}", let: ${user.name}`); //debug
-      io.sockets.emit('chat', data);
-    } else {
-      io.sockets.emit('chat', data);
     }
+    io.sockets.emit('chat', data);
   });
 
   // listens particular emitted typing event from clientside
