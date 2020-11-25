@@ -18,19 +18,25 @@ var io = socket(server);
 // inspired from adrianhajdin.
 const { addUser, getUser, updateUser, displayAllUsers, removeUser } = require('./userMan.js');
 
+
+function someoneConnected(id) {
+  const prefix = 'user#';
+  const { user } = addUser({
+    id: id,
+    name: prefix.concat(id.substring(16))
+  });
+  console.log('someone is socket-connected. id: '+ id +', '+ user.name);
+  displayAllUsers();
+}
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
 // to do stuff with that socket object later on.
 // And log the socket.id
-const prefix = 'user#';
 io.on('connection', function(socket) {
-  const { user } = addUser({
-    id: socket.id,
-    name: prefix.concat(socket.id.substring(16))
+  someoneConnected(socket.id);
+  io.to(socket.id).emit('defaultName', {
+    userName: getUser(socket.id).name
   });
-  console.log('someone is socket-connected. id: '+ socket.id +', '+ user.name);
-  displayAllUsers();
-
   // listens emitted chat contains data in it.
   // refers to ALL socket connections inside chat room,
   // then emit data sent by one of the client to ALL
@@ -44,7 +50,10 @@ io.on('connection', function(socket) {
     }
 
     if (data.userName.trim() == '') {
-      io.sockets.emit('chat', user.name);
+      let user = getUser(socket.id);
+      data.userName = user.name;
+      console.log(`if trim test "${data.userName}", let: ${user.name}`); //debug
+      io.sockets.emit('chat', data);
     } else {
       io.sockets.emit('chat', data);
     }
@@ -55,7 +64,7 @@ io.on('connection', function(socket) {
   // data which consist of their ID in clientside/frontend.
   socket.on('typing', (data) => {
     let user = getUser(socket.id);
-    if (data.userName.trim() == '') {
+    if (data.trim() == '') {
       socket.broadcast.emit('typing', user.name);
     } else {
       socket.broadcast.emit('typing', data);

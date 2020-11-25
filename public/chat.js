@@ -8,11 +8,11 @@ var message = document.getElementById('message'),
   output = document.getElementById('output'),
   isTyping = document.getElementById('isTyping'),
   chatBox = document.getElementById('chat-box');
-/*
-userName.addEventListener('keyup', (event) => {
-  if ()
+
+// retrieve initial name from server
+socket.on('defaultName', (data) => {
+  userName.value = data.userName;
 });
-*/
 // emit events.
 // emitting socket consists of two params., the first is
 // going to be "chat" messages, the second is the data
@@ -37,7 +37,6 @@ function trySendMessage() {
       message: message.value,
       userName: userName.value
     });
-    console.log('chat emitted.');
     return message.value = '';
   }
 }
