@@ -13,15 +13,16 @@ function getUser(id) {
   user.id === id);
 };
 
-const editUser = (id, data) => {
+const updateUser = (id, data) => {
   for (var i in users) {
-    if (users[i].id === id) {
+    if (id === users[i].id && data.userName !== users[i].name) {
       console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
       users[i].name = data.userName;
       console.log(`${users[i].name}(${users[i].id})`);
-      return;
+      return true;
     }
   }
+  return false;
 };
 
 const displayAllUsers = () => {
@@ -49,4 +50,4 @@ function removeUser(id) {
 };
 
 // export the modules so they can be used by another class
-module.exports = { addUser, getUser, editUser, displayAllUsers, removeUser };
+module.exports = { addUser, getUser, updateUser, displayAllUsers, removeUser };

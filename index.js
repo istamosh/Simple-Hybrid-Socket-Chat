@@ -16,7 +16,7 @@ var io = socket(server);
 
 // adding user managing modules from other class
 // inspired from adrianhajdin.
-const { addUser, getUser, editUser, displayAllUsers, removeUser } = require('./userMan.js');
+const { addUser, getUser, updateUser, displayAllUsers, removeUser } = require('./userMan.js');
 
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
@@ -36,10 +36,18 @@ io.on('connection', function(socket) {
   // then emit data sent by one of the client to ALL
   // the other socket clients.
   // data is a bundled variable inside {} with : of it.
-  socket.on('chat', function(data){
-    editUser(socket.id, data);
-    displayAllUsers(); // debugging purpose
-    io.sockets.emit('chat', data);
+  socket.on('chat', function(data) {
+    let updated = updateUser(socket.id, data);
+    //console.log(`updated status: ${updated}`);
+    if (updated) {
+      displayAllUsers();
+    }
+
+    if (data.userName.trim() == '') {
+      io.sockets.emit('chat', user.name);
+    } else {
+      io.sockets.emit('chat', data);
+    }
   });
 
   // listens particular emitted typing event from clientside
@@ -47,7 +55,7 @@ io.on('connection', function(socket) {
   // data which consist of their ID in clientside/frontend.
   socket.on('typing', (data) => {
     let user = getUser(socket.id);
-    if (data.trim() == '') {
+    if (data.userName.trim() == '') {
       socket.broadcast.emit('typing', user.name);
     } else {
       socket.broadcast.emit('typing', data);

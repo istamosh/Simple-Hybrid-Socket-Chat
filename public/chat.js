@@ -32,11 +32,12 @@ btnSend.addEventListener('click', function() {
 });
 // adding func. for handle whitespace, click and enter event.
 function trySendMessage() {
-  if ((message.value.trim() != '') && (userName.value.trim() != '')) {
+  if (message.value.trim() != '') {
     socket.emit('chat', {
       message: message.value,
       userName: userName.value
     });
+    console.log('chat emitted.');
     return message.value = '';
   }
 }
