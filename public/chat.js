@@ -67,11 +67,19 @@ socket.on('chat', function(data) {
   isTyping.innerHTML = "";
   output.innerHTML += '<p><strong>' + data.userName +
   ': </strong>' + data.message + '</p>';
+  checkScrollSnap();
+});
 
+socket.on('systemChat', (data) => {
+  output.innerHTML += `<p><admin>${data.name}: </admin>${data.message}</p>`;
+  checkScrollSnap();
+});
+
+function checkScrollSnap() {
   if (scrollSnap) {
     chatBox.scrollTo(0, chatBox.scrollHeight);
   }
-});
+};
 
 // listening on typing event with carried data from
 // serverside, then append into isTyping's HTML side.

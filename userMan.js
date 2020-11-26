@@ -3,7 +3,7 @@ const users = [];
 function addUser({ id, name }) {
   const user = { id, name };
   users.push(user);
-  return { user };
+  return;
 };
 
 // find user within users array using incoming id param. by matching
@@ -35,7 +35,6 @@ const displayAllUsers = () => {
   for (var i in users) {
     console.log(` - [${i}]: ${users[i].name}(${users[i].id})`);
   }
-  console.log(`=============================================`);
   return;
 };
 

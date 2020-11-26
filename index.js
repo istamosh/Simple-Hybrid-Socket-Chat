@@ -18,20 +18,20 @@ var io = socket(server);
 // inspired from adrianhajdin.
 const { addUser, getUser, updateUser, displayAllUsers, removeUser } = require('./userMan.js');
 
-
-function someoneConnected(id) {
-  const { user } = addUser({
-    id: id,
-    name: ('user#').concat(id.substring(16))
-  });
-  console.log(`${user.name}(${id}) is connected.`);
-};
 // listen on server io connection, then fire a callback
 // funct. refers to a particular instance of a socket
 // to do stuff with that socket object later on.
 // And log the socket.id
 io.on('connection', function(socket) {
-  someoneConnected(socket.id);
+  addUser({
+    id: socket.id,
+    name: ('user#').concat(socket.id.substring(16))
+  });
+  console.log(`(${socket.id}) is connected.`);
+  socket.broadcast.emit('systemChat', {
+    name: 'system',
+    message: `${('user#').concat(socket.id.substring(16))} came in.`
+  });
   /*
   io.to(socket.id).emit('defaultName', {
     userName: getUser(socket.id).name
@@ -44,9 +44,6 @@ io.on('connection', function(socket) {
   // data is a bundled variable inside {} with : of it.
   socket.on('chat', function(data) {
     let updated = updateUser(socket.id, data);
-    if (updated) {
-      displayAllUsers();
-    }
 
     if (data.userName.trim() == '') {
       let user = getUser(socket.id);
@@ -68,6 +65,15 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', () => {
-    console.log(`${socket.id} has disconnected.`);
+    let user = removeUser(socket.id);
+    if (user) {
+      console.log(`${socket.id} has disconnected.`);
+      displayAllUsers();
+
+      io.sockets.emit('systemChat', {
+        name: 'system',
+        message: `${user.name}(${user.id}) left the chat.`
+      });
+    }
   });
 });
