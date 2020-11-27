@@ -81,19 +81,61 @@ function checkScrollSnap() {
   }
 };
 
+// others typing mechanism
+const typingUsers = [];
+const d = new Date(); // << this is so wrong
+
+const add = (data) => {
+  const typingUser = {
+    name: data,
+    time: d.getSeconds()
+  };
+  typingUsers.push(typingUser);
+};
+
+const populate = () => {
+  console.log('===');
+  for (var i in typingUsers) {
+    console.log(`${typingUsers[i].name} [${typingUsers[i].time}]`);
+  }
+};
+
 // listening on typing event with carried data from
 // serverside, then append into isTyping's HTML side.
 // concatenate data variable between two HTML tags.
 // note: <em> tag is italic style, named 'emphasis'
-var typingUsers = [];
-const time = 3;
 socket.on('typing', (data) => {
-  var typingUser = {
-    name: data,
-    time: time
-  };
-  typingUsers.push(typingUser);
-  console.log(`currently typing: ${typingUsers[0].name}, time: ${typingUsers[0].time}`);
+  if (typingUsers.length === 0) {
+    add(data);
+    populate();
+  } else {
+    let existed = false;
+    for (var i in typingUsers) {
+      if (data === typingUsers[i].name) {
+        typingUsers[i].time = d.getSeconds();
+        console.log(`${typingUsers[i].name} updated. [${typingUsers[i].time}]`);
+        existed = true;
+        break;
+      }
+    }
+    if (!existed) {
+      add(data);
+      populate();
+    }
+  }
+  //startTimer();
 
   isTyping.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
 });
+
+const startTimer = () => {
+  setInterval(() => {
+    for (var i in typingUsers) {
+      if (typingUsers[i].time >= 57) {
+        typingUsers.splice(i, 1)[0];
+      } else if (d.getSeconds() >= typingUsers[i].time) {
+        // timeout after 3 seconds at max 56 sec.
+      }
+    }
+  }, 3000);
+}

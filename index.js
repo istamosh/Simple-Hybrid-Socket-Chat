@@ -56,12 +56,11 @@ io.on('connection', function(socket) {
   // to every other clients EXCEPT the typer, of the typer
   // data which consist of their ID in clientside/frontend.
   socket.on('typing', (data) => {
-    let user = getUser(socket.id);
     if (data.trim() == '') {
-      socket.broadcast.emit('typing', user.name);
-    } else {
-      socket.broadcast.emit('typing', data);
+      let user = getUser(socket.id);
+      data = user.name;
     }
+    socket.broadcast.emit('typing', data);
   });
 
   socket.on('disconnect', () => {
