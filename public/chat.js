@@ -83,9 +83,9 @@ function checkScrollSnap() {
 
 // others typing mechanism
 const typingUsers = [];
-const d = new Date(); // << this is so wrong
 
 const add = (data) => {
+  const d = new Date();
   const typingUser = {
     name: data,
     time: d.getSeconds()
@@ -112,7 +112,8 @@ socket.on('typing', (data) => {
     let existed = false;
     for (var i in typingUsers) {
       if (data === typingUsers[i].name) {
-        typingUsers[i].time = d.getSeconds();
+        const date = new Date();
+        typingUsers[i].time = date.getSeconds();
         console.log(`${typingUsers[i].name} updated. [${typingUsers[i].time}]`);
         existed = true;
         break;
