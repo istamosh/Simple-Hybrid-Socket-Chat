@@ -85,11 +85,19 @@ function checkScrollSnap() {
 const typingUsers = [];
 
 const add = (data) => {
-  const d = new Date();
-  const typingUser = {
-    name: data,
-    time: d.getSeconds()
-  };
+  let d = new Date();
+  var typingUser;
+  if (d.getSeconds() >= 57) {
+    typingUser = {
+      name: data,
+      time: d.getSeconds() - 60
+    };
+  } else {
+    typingUser = {
+      name: data,
+      time: d.getSeconds()
+    };
+  }
   typingUsers.push(typingUser);
 };
 
@@ -98,45 +106,71 @@ const populate = () => {
   for (var i in typingUsers) {
     console.log(`${typingUsers[i].name} [${typingUsers[i].time}]`);
   }
+  console.log('=====');
 };
 
 // listening on typing event with carried data from
 // serverside, then append into isTyping's HTML side.
 // concatenate data variable between two HTML tags.
 // note: <em> tag is italic style, named 'emphasis'
+var started = false;
 socket.on('typing', (data) => {
-  if (typingUsers.length === 0) {
+  if (typingUsers.length === 0) { // virgin array
     add(data);
     populate();
   } else {
     let existed = false;
     for (var i in typingUsers) {
       if (data === typingUsers[i].name) {
-        const date = new Date();
-        typingUsers[i].time = date.getSeconds();
-        console.log(`${typingUsers[i].name} updated. [${typingUsers[i].time}]`);
+        let d = new Date(); // if match, refresh their duration
+        if (d.getSeconds() >= 57) {
+          typingUsers[i].time = d.getSeconds() - 60;
+        } else {
+          typingUsers[i].time = d.getSeconds();
+        }
+        console.log(`${typingUsers[i].name} extended.`);
         existed = true;
         break;
       }
     }
-    if (!existed) {
+    if (!existed) { // add for nonexistent user
       add(data);
       populate();
     }
   }
-  //startTimer();
 
-  isTyping.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
+  if (!started) { // check typing listener for first time
+    startTimer();
+    /*
+    setTimeout(() => { // cd 3s then exe timer
+      startTimer();
+    }, 3000); */
+    started = true;
+  }
 });
 
 const startTimer = () => {
   setInterval(() => {
-    for (var i in typingUsers) {
-      if (typingUsers[i].time >= 57) {
+    let d = new Date(); // check new time
+    console.log(d.getSeconds());
+    for (var i in typingUsers) { // deal with users
+      if (d.getSeconds() -3 >= typingUsers[i].time) {
+        console.log(`${typingUsers[i].name} spliced.`);
         typingUsers.splice(i, 1)[0];
-      } else if (d.getSeconds() >= typingUsers[i].time) {
-        // timeout after 3 seconds at max 56 sec.
       }
     }
-  }, 3000);
+
+    var oneLiner = '';
+    if (typingUsers.length > 0 && typingUsers.length < 4) {
+      oneLiner = typingUsers.map(e => e.name).join(', ');
+      isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
+    } else if (typingUsers.length >= 4) {
+      oneLiner = 'several people are';
+      isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
+    } else {
+      oneLiner = '';
+      isTyping.innerHTML = '';
+    }
+    //isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
+  }, 1000);
 }
