@@ -1,14 +1,13 @@
 // main server controller here
-var express = require('express');
-var socket = require('socket.io');
+var express = require('express'),
+  socket = require('socket.io');
 
 // App setup, invoke express funct.
 var app = express();
 var server = app.listen(5000, function() {
   console.log('listening on port 5000');
 });
-
-// Middleware/ using Static public files to serve
+// Middleware/ using Static public files to be served on
 app.use(express.static('public'));
 
 // setup socket to work in the server
@@ -32,6 +31,7 @@ io.on('connection', function(socket) {
     name: 'system',
     message: `${('user#').concat(socket.id.substring(16))} came in.`
   });
+  console.log(`cookies: ${socket.request.headers.cookie}`);
   /*
   io.to(socket.id).emit('defaultName', {
     userName: getUser(socket.id).name

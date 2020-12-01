@@ -117,7 +117,7 @@ var started = false;
 socket.on('typing', (data) => {
   if (typingUsers.length === 0) { // virgin array
     add(data);
-    populate();
+    //populate();
   } else {
     let existed = false;
     for (var i in typingUsers) {
@@ -128,23 +128,19 @@ socket.on('typing', (data) => {
         } else {
           typingUsers[i].time = d.getSeconds();
         }
-        console.log(`${typingUsers[i].name} extended.`);
+        //console.log(`${typingUsers[i].name} extended.`);
         existed = true;
         break;
       }
     }
     if (!existed) { // add for nonexistent user
       add(data);
-      populate();
+      //populate();
     }
   }
 
   if (!started) { // check typing listener for first time
     startTimer();
-    /*
-    setTimeout(() => { // cd 3s then exe timer
-      startTimer();
-    }, 3000); */
     started = true;
   }
 });
@@ -152,10 +148,10 @@ socket.on('typing', (data) => {
 const startTimer = () => {
   setInterval(() => {
     let d = new Date(); // check new time
-    console.log(d.getSeconds());
+    //console.log(d.getSeconds());
     for (var i in typingUsers) { // deal with users
       if (d.getSeconds() -3 >= typingUsers[i].time) {
-        console.log(`${typingUsers[i].name} spliced.`);
+        //console.log(`${typingUsers[i].name} spliced.`);
         typingUsers.splice(i, 1)[0];
       }
     }
@@ -165,12 +161,11 @@ const startTimer = () => {
       oneLiner = typingUsers.map(e => e.name).join(', ');
       isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
     } else if (typingUsers.length >= 4) {
-      oneLiner = 'several people are';
-      isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
+      isTyping.innerHTML = '<p><em>several people are typing...</em></p>';
     } else {
       oneLiner = '';
       isTyping.innerHTML = '';
     }
     //isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
   }, 1000);
-}
+};
