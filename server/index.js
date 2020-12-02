@@ -1,16 +1,15 @@
 // main server controller here
 var express = require('express'),
-  socket = require('socket.io');
+  socket = require('socket.io'),
+  cors = require('cors');
 
 // App setup, invoke express funct.
 var app = express();
 
-// want to use this as login page
-//app.get('/', (req, res) => {
-//  res.send('Login page.');
-//});
-// then this to chat page, how to do that?
+// pinpoint
 app.use(express.static('public'));
+// cors for deployment
+app.use(cors());
 
 var server = app.listen(5000);
 // setup socket to work in the server
