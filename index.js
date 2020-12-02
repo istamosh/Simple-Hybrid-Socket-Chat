@@ -1,7 +1,7 @@
 // main server controller here
 var express = require('express'),
-  socket = require('socket.io'),
-  cors = require('cors');
+  socket = require('socket.io');
+  //cors = require('cors');
 
 // App setup, invoke express funct.
 var app = express();
@@ -9,7 +9,7 @@ var app = express();
 // pinpoint
 app.use(express.static('public'));
 // cors for deployment
-app.use(cors());
+//app.use(cors());
 
 var server = app.listen(5000);
 // setup socket to work in the server
