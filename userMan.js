@@ -20,9 +20,9 @@ const updateUser = (id, data) => {
         users[i].name = ('user#').concat(users[i].id.substring(16));
         return true;
       } else {
-        console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
+        //console.log(`${users[i].name}(${users[i].id}) has changed their name to:`);
         users[i].name = data.userName;
-        console.log(`${users[i].name}(${users[i].id})`);
+        //console.log(`${users[i].name}(${users[i].id})`);
         return true;
       }
     }

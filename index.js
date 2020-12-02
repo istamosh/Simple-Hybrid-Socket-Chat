@@ -4,12 +4,15 @@ var express = require('express'),
 
 // App setup, invoke express funct.
 var app = express();
-var server = app.listen(5000, function() {
-  console.log('listening on port 5000');
-});
-// Middleware/ using Static public files to be served on
+
+// want to use this as login page
+//app.get('/', (req, res) => {
+//  res.send('Login page.');
+//});
+// then this to chat page, how to do that?
 app.use(express.static('public'));
 
+var server = app.listen(5000);
 // setup socket to work in the server
 var io = socket(server);
 
@@ -26,12 +29,12 @@ io.on('connection', function(socket) {
     id: socket.id,
     name: ('user#').concat(socket.id.substring(16))
   });
-  console.log(`(${socket.id}) is connected.`);
+  //console.log(`(${socket.id}) is connected.`);
   socket.broadcast.emit('systemChat', {
     name: 'system',
     message: `${('user#').concat(socket.id.substring(16))} came in.`
   });
-  console.log(`cookies: ${socket.request.headers.cookie}`);
+  //console.log(`cookies: ${socket.request.headers.cookie}`);
   /*
   io.to(socket.id).emit('defaultName', {
     userName: getUser(socket.id).name
@@ -66,8 +69,8 @@ io.on('connection', function(socket) {
   socket.on('disconnect', () => {
     let user = removeUser(socket.id);
     if (user) {
-      console.log(`${socket.id} has disconnected.`);
-      displayAllUsers();
+      //console.log(`${socket.id} has disconnected.`);
+      //displayAllUsers();
 
       io.sockets.emit('systemChat', {
         name: 'system',

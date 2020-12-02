@@ -64,7 +64,7 @@ chatBox.addEventListener('scroll', () => {
 // append pre-cooked code inside output's HTML as chat comp.
 // reset isTyping HTML to empty (this need more work).
 socket.on('chat', function(data) {
-  isTyping.innerHTML = "";
+  //isTyping.innerHTML = "";
   output.innerHTML += '<p><strong>' + data.userName +
   ': </strong>' + data.message + '</p>';
   checkScrollSnap();
@@ -81,7 +81,7 @@ function checkScrollSnap() {
   }
 };
 
-// others typing mechanism
+// other user typing mechanism
 const typingUsers = [];
 
 const add = (data) => {
@@ -159,7 +159,7 @@ const startTimer = () => {
     var oneLiner = '';
     if (typingUsers.length > 0 && typingUsers.length < 4) {
       oneLiner = typingUsers.map(e => e.name).join(', ');
-      isTyping.innerHTML = '<p><em>' + oneLiner + ' typing...</em></p>';
+      isTyping.innerHTML = '<p><em>' + oneLiner + ' is typing...</em></p>';
     } else if (typingUsers.length >= 4) {
       isTyping.innerHTML = '<p><em>several people are typing...</em></p>';
     } else {
